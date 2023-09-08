@@ -333,8 +333,125 @@ GET|HEAD     /despesas/:id ─────────────────�
 PUT|PATCH    /despesas/:id ─────────────────────── despesas.update › DespesasController.update
 DELETE       /despesas/:id ───────────────────── despesas.destroy › DespesasController.destroy
 
- 
+ # Instalar pacote de autenticação:
+  npm i @adonisjs/auth 
+# Configurar o pacote de autenticação:
+node ace invoke @adonisjs/auth
 
+# RODAR AS MIGRATIONS DE AUTENTICAÇÃO
+node ace migration:run
+# Criar o Controller com a lógica de login e logout
+node ace make:controller Auth -r
+
+AuthController.ts
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+export default class AuthController {
+  
+  public async store({ request, auth }: HttpContextContract) {
+    const { email, password } = request.all()
+
+    const token = await auth.attempt(email, password, {
+      expiresIn: '30 days'
+    })
+
+    return token
+  }
+
+
+  public async destroy({ auth }: HttpContextContract) {
+    await auth.logout()
+  }
+}
+
+# Criando as rotas de login e logout
+start/routes.ts
+
+import Route from '@ioc:Adonis/Core/Route'
+
+Route.get('/', async () => {
+  return { hello: 'world' }
+})
+
+Route.get('/posts', 'PostsController.index')
+
+Route.resource('/despesas', 'DespesasController').apiOnly() //Apenas para os métodos usados, excluímos create() e edit()
+
+Route.post ('/auth', 'AuthController.store')
+
+Route.post ('/auth', 'AuthController.destroy')
+
+* Criamos dentro de start uma pasta de nome routes e dentro dela colocamos os arquivos de rotas auth.ts, posts.ts,
+  depesas.ts e o index.ts para exportar todos os outros, uma maneira de organizar as rotas em arquivos separados.
+*******************************
+  index.ts
+  import Route from '@ioc:Adonis/Core/Route'
+
+import './auth'
+
+import './despesas'
+
+import './posts'
+
+
+Route.get('/', async () => {
+    return { hello: 'world' }
+  })
+ ***************************** 
+auth.ts
+import Route from '@ioc:Adonis/Core/Route'
+
+Route.post ('/auth', 'AuthController.store')
+
+Route.post ('/auth', 'AuthController.destroy')
+
+*** ou podemos colocar em grupo:
+
+import Route from '@ioc:Adonis/Core/Route'
+
+Route.group(() => {
+  Route.post('/', 'AuthController.store')
+  Route.delete('/', 'AuthController.destroy')
+}).prefix('/auth')
+
+***************************
+ 
+posts.ts
+import Route from '@ioc:Adonis/Core/Route'
+
+Route.get('/posts', 'PostsController.index')
+
+*******************************
+despesas.ts
+import Route from '@ioc:Adonis/Core/Route'
+
+Route.resource('/despesas', 'DespesasController').apiOnly() //Apenas para os métodos usados, excluímos create() e edit()
+************************************
+
+
+# Criando um primeiro usuário com seed:
+node ace make:seeder FirstUser
+ database/seeders/FirstUser.ts
+ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+
+import  User from 'App/Models/User'
+
+export default class extends BaseSeeder {
+  public async run () {
+    // Write your database queries inside the run method
+    await User.create({
+      email: 'albertogomesdasilva@gmail.com',
+      password: '123456'
+    })
+  }
+}
+# Executar a seed que cadastra o primeiro usuário:
+node ace db:seed
+* se precisar instala o pacote de hash: 
+
+npm i phc-argon2
+
+**********
 
 
 

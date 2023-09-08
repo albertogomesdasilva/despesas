@@ -6,7 +6,7 @@ import Despesa from 'App/Models/Despesa'
 export default class DespesasController {
   public async index({}: HttpContextContract) {
     const despesas = await Despesa.all()
-
+    // const despesas = await Despesa.query().orderBy('id')
     return despesas
   }
 
