@@ -1,3 +1,5 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('/despesas', 'DespesasController').apiOnly() //Apenas para os métodos usados, excluímos create() e edit()
+
+//Apenas para os métodos usados, excluímos create() e edit()
+Route.resource('/despesas', 'DespesasController').apiOnly().middleware({ store: 'auth', update: 'auth', destroy: 'auth'})

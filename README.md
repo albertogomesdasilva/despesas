@@ -1,7 +1,18 @@
 https://legacy.adonisjs.com/docs/4.1/migrations#_run_migrations
 
+*********** exemplo de .prettierrc
+.prettierrc
 
-
+{
+    "trailingComma": "none",
+    "semi": false,
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "printWidth": 100
+}
+*********************************
 
 1. npm init adonis-ts-app@latest facebook-api
    npx create-adonis-ts-app backend
@@ -452,6 +463,28 @@ node ace db:seed
 npm i phc-argon2
 
 **********
+# Registrano a middleware de autenticação para ser usada nas rotas passando onde está o arquivo com as regras de autenticação:
+start/kernel.ts
+
+Server.middleware.registerNamed({
+    auth: './App/Middleware/Auth'
+})
+******************
+routes/despesas.ts
+
+import Route from '@ioc:Adonis/Core/Route'
+
+
+//Apenas para os métodos usados, excluímos create() e edit()
+Route.resource('/despesas', 'DespesasController')
+    .apiOnly()
+    .middleware({
+        store: ['auth'],
+        update: ['auth'],
+        destroy: ['auth']
+    }) 
+
+
 
 
 
