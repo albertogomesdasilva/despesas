@@ -87,6 +87,38 @@ export default class extends BaseSeeder {
   }
 }
 
+/*********** */
+SEED DE VÁRIOS USUÁRIOS:
+import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+
+import  User from 'App/Models/User'
+
+export default class extends BaseSeeder {
+//  public static developmentOnly = true  // Opcional para a seed só ser executada em modo de desenvolvimento
+
+  public async run () {
+    // Write your database queries inside the run method
+    // await User.create({
+    //   email: 'albertogomesdasilva@gmail.com',
+    //   password: '123456',
+    // }),
+
+    await User.createMany([
+      {
+        email: 'albertogomesdasilva@gmail.com',
+        password: '123456',
+        role: 'normal'
+      }, 
+      {
+        email: 'admin@admin.com',
+        password: 'admin',
+        role: 'admin'
+      }
+    ])
+  }
+}
+/************************* */
+
 16. npm install --save phc-argon2 -> Pacote para fazer o hash da senha
 
 17. node ace db:seed -> Executar as seeders, Cria neste caso o primeiro usuário
@@ -484,6 +516,14 @@ Route.resource('/despesas', 'DespesasController')
         destroy: ['auth']
     }) 
 
+
+# node ace make:validator Despesa -> para limpar espaços, personalizar mensagens de erros, ...
+Descrição
+Tipos de validação
+https://preview.adonisjs.com/guides/validator/schema-types
+
+Regras de validação
+https://preview
 
 
 

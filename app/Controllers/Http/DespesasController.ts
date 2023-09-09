@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Despesa from 'App/Models/Despesa'
 
+// import DespesaValidator from 'App/Validators/DespesaValidator'
+
 // import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class DespesasController {
@@ -16,7 +18,10 @@ export default class DespesasController {
     // const { descricao, valor, pagamento, status, vencimento, obs } = request.all()  // Se importar o Database na linha 3
     // const despesa = await Despesa.create({ descricao, valor, pagamento, status, vencimento, obs })  // Se importar o Database na linha 3
     const data = request.only([ 'descricao', 'valor', 'pagamento', 'status', 'vencimento', 'obs'  ])
-    const despesa = await Despesa.create( data )
+    
+    // const data = await request.validate(DespesaValidator)
+
+    const despesa = await Despesa.create(data)
 
    
     return despesa
@@ -39,6 +44,9 @@ export default class DespesasController {
 
   public async update({ request, params}: HttpContextContract) {
     const despesa = await Despesa.findOrFail(params.id)
+    
+    // const data = await request.validate(DespesaValidator)
+
     const data = request.only([ 'descricao', 'valor', 'pagamento', 'status', 'vencimento', 'obs'  ])
 
     despesa.merge(data)

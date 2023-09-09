@@ -7,9 +7,22 @@ export default class extends BaseSeeder {
 
   public async run () {
     // Write your database queries inside the run method
-    await User.create({
-      email: 'albertogomesdasilva@gmail.com',
-      password: '123456'
-    })
+    // await User.create({
+    //   email: 'albertogomesdasilva@gmail.com',
+    //   password: '123456',
+    // }),
+
+    await User.createMany([
+      {
+        email: 'albertogomesdasilva@gmail.com',
+        password: '123456',
+        role: 'normal'
+      }, 
+      {
+        email: 'admin@admin.com',
+        password: 'admin',
+        role: 'admin'
+      }
+    ])
   }
 }
