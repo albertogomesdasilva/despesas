@@ -14,7 +14,7 @@ export default class Despesa extends BaseModel {
 // ////////////////////////////////////////
 
 @column()
-  public vencimento: DateTime
+  public vencimento: string
 
 
 /// //////////////////////////////////////////  
@@ -23,7 +23,7 @@ export default class Despesa extends BaseModel {
 
 // /////////////////////////////////////////////  
 @column()
-  public pagamento: DateTime
+  public pagamento: string
 ///////////////////////////////////////  
 
 @column()
